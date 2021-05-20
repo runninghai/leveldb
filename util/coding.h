@@ -20,6 +20,7 @@
 namespace leveldb {
 
 // Standard Put... routines append to a string
+// dst字符串后追加相应的数字编码
 void PutFixed32(std::string* dst, uint32_t value);
 void PutFixed64(std::string* dst, uint64_t value);
 void PutVarint32(std::string* dst, uint32_t value);
@@ -28,6 +29,7 @@ void PutLengthPrefixedSlice(std::string* dst, const Slice& value);
 
 // Standard Get... routines parse a value from the beginning of a Slice
 // and advance the slice past the parsed value.
+// 从slice中解析出相应的value, 并且偏置slice中的指针
 bool GetVarint32(Slice* input, uint32_t* value);
 bool GetVarint64(Slice* input, uint64_t* value);
 bool GetLengthPrefixedSlice(Slice* input, Slice* result);
@@ -55,6 +57,9 @@ inline void EncodeFixed32(char* dst, uint32_t value) {
   uint8_t* const buffer = reinterpret_cast<uint8_t*>(dst);
 
   // Recent clang and gcc optimize this to a single mov / str instruction.
+  // 直接把一个int32强转成uint8_t 取到末尾8位
+  // 后续移出已经被读取的字节再依次取低8位
+  // 符合小端顺序 数字低位放到指针低位 数字高位放到指正高位
   buffer[0] = static_cast<uint8_t>(value);
   buffer[1] = static_cast<uint8_t>(value >> 8);
   buffer[2] = static_cast<uint8_t>(value >> 16);
@@ -105,10 +110,12 @@ inline uint64_t DecodeFixed64(const char* ptr) {
 // Internal routine for use by fallback path of GetVarint32Ptr
 const char* GetVarint32PtrFallback(const char* p, const char* limit,
                                    uint32_t* value);
+// 从p到limit中读取一个int32_t的值
 inline const char* GetVarint32Ptr(const char* p, const char* limit,
                                   uint32_t* value) {
   if (p < limit) {
     uint32_t result = *(reinterpret_cast<const uint8_t*>(p));
+    // 对于小于128的情况的特殊处理?
     if ((result & 128) == 0) {
       *value = result;
       return p + 1;

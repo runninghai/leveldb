@@ -6,7 +6,9 @@ tags:
 ---
 
 ## annotated
-include/leveldb/slice.h
+include/leveldb/slice.h  
+util/coding.h  
+util/coding.cc
 
 ## unannotated
 db/write_batch_internal.h  
@@ -63,8 +65,6 @@ util/env.cc
 util/crc32c.h  
 util/crc32c.cc  
 util/comparator.cc  
-util/coding.h  
-util/coding.cc  
 util/cache.cc  
 util/bloom.cc  
 util/arena.h  
