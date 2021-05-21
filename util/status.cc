@@ -12,12 +12,18 @@ namespace leveldb {
 
 const char* Status::CopyState(const char* state) {
   uint32_t size;
+  // 计算message的size大小
   std::memcpy(&size, state, sizeof(size));
+  // 0-3 size 4 code值 所以需要额外增加5byte
   char* result = new char[size + 5];
+  // 内存copy
   std::memcpy(result, state, size + 5);
   return result;
 }
 
+// 最终存在state_的状态
+// len statusmsg: msg2
+// 01234     5....
 Status::Status(Code code, const Slice& msg, const Slice& msg2) {
   assert(code != kOk);
   const uint32_t len1 = static_cast<uint32_t>(msg.size());
@@ -69,6 +75,7 @@ std::string Status::ToString() const {
     std::string result(type);
     uint32_t length;
     std::memcpy(&length, state_, sizeof(length));
+    // 从第5个字节copy msg: msg2的内容
     result.append(state_ + 5, length);
     return result;
   }

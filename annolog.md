@@ -9,6 +9,10 @@ tags:
 include/leveldb/slice.h  
 util/coding.h  
 util/coding.cc
+util/arena.h  
+util/arena.cc  
+util/status.cc  
+include/leveldb/status.h  
 
 ## unannotated
 db/write_batch_internal.h  
@@ -44,7 +48,6 @@ db/builder.h
 db/builder.cc  
 util/windows_logger.h  
 util/testutil.h  
-util/status.cc  
 util/random.h  
 util/posix_logger.h  
 util/options.cc  
@@ -67,8 +70,6 @@ util/crc32c.cc
 util/comparator.cc  
 util/cache.cc  
 util/bloom.cc  
-util/arena.h  
-util/arena.cc  
 table/two_level_iterator.h  
 table/two_level_iterator.cc  
 table/table_builder.cc  
@@ -92,7 +93,6 @@ port/port.h
 include/leveldb/write_batch.h  
 include/leveldb/table_builder.h  
 include/leveldb/table.h  
-include/leveldb/status.h  
 include/leveldb/options.h  
 include/leveldb/iterator.h  
 include/leveldb/filter_policy.h  

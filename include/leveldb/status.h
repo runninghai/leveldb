@@ -4,6 +4,7 @@
 //
 // A Status encapsulates the result of an operation.  It may indicate success,
 // or it may indicate an error with an associated error message.
+// 表示一个db操作的结果状态
 //
 // Multiple threads can invoke const methods on a Status without
 // external synchronization, but if any of the threads may call a
@@ -37,6 +38,13 @@ class LEVELDB_EXPORT Status {
   static Status OK() { return Status(); }
 
   // Return error status of an appropriate type.
+  // 面向对象语言要么有函数重载像java 要么有自定义默认值像php python
+  // 就尼玛c++秀又要有重载又要重自定义默认值
+  // func(int a, int b = 2)
+  // func(int a)
+  // func(1) 应该走到哪个函数 ?
+  // 结论 重载函数不允许出现默认参数
+  // 看起来这帮c++老哥更加喜欢默认参数啊
   static Status NotFound(const Slice& msg, const Slice& msg2 = Slice()) {
     return Status(kNotFound, msg, msg2);
   }
@@ -97,12 +105,19 @@ class LEVELDB_EXPORT Status {
   //    state_[0..3] == length of message
   //    state_[4]    == code
   //    state_[5..]  == message
+
+  // state_ 字符串在kok的情况下为nullptr
+  // 否则0-3 字节为int32描述消息长度
+  // 4号字节存储status状态
+  // 后续的字节存储消息内容
   const char* state_;
 };
 
+// 拷贝初始化
 inline Status::Status(const Status& rhs) {
   state_ = (rhs.state_ == nullptr) ? nullptr : CopyState(rhs.state_);
 }
+// 赋值操作符重载
 inline Status& Status::operator=(const Status& rhs) {
   // The following condition catches both aliasing (when this == &rhs),
   // and the common case where both rhs and *this are ok.
@@ -112,6 +127,7 @@ inline Status& Status::operator=(const Status& rhs) {
   }
   return *this;
 }
+// 右值引用函数赋值
 inline Status& Status::operator=(Status&& rhs) noexcept {
   std::swap(state_, rhs.state_);
   return *this;
