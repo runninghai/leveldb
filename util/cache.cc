@@ -38,6 +38,8 @@ namespace {
 // when they detect an element in the cache acquiring or losing its only
 // external reference.
 
+// 非常标准的lrucache的实现
+
 // An entry is a variable length heap-allocated structure.  Entries
 // are kept in a circular doubly linked list ordered by access time.
 struct LRUHandle {

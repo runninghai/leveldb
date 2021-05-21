@@ -29,12 +29,14 @@ class LEVELDB_EXPORT Cache;
 
 // Create a new cache with a fixed size capacity.  This implementation
 // of Cache uses a least-recently-used eviction policy.
+// 容量capacity
 LEVELDB_EXPORT Cache* NewLRUCache(size_t capacity);
 
 class LEVELDB_EXPORT Cache {
  public:
   Cache() = default;
 
+  // 禁止copy复制
   Cache(const Cache&) = delete;
   Cache& operator=(const Cache&) = delete;
 
@@ -43,6 +45,7 @@ class LEVELDB_EXPORT Cache {
   virtual ~Cache();
 
   // Opaque handle to an entry stored in the cache.
+  // 每个kv都通过Handler句柄读写
   struct Handle {};
 
   // Insert a mapping from key->value into the cache and assign it
