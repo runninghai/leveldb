@@ -13,6 +13,7 @@ util/arena.h
 util/arena.cc  
 util/status.cc  
 include/leveldb/status.h  
+db/skiplist.h  
 
 ## unannotated
 db/write_batch_internal.h  
@@ -24,7 +25,6 @@ db/version_edit.cc
 db/table_cache.h  
 db/table_cache.cc  
 db/snapshot.h  
-db/skiplist.h  
 db/repair.cc  
 db/memtable.h  
 db/memtable.cc  
